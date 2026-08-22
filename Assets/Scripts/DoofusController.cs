@@ -6,6 +6,7 @@ public class DoofusController : MonoBehaviour
     [SerializeField] private TextAsset configFile;
 
     private float speed;
+    private GameObject currentPulpit;
 
     private void Start()
     {
@@ -35,6 +36,8 @@ public class DoofusController : MonoBehaviour
         Vector3 movement = new Vector3(input.x, 0f, input.y).normalized;
 
         transform.position += movement * speed * Time.deltaTime;
+
+        CheckPulpit();
     }
 
     [System.Serializable]
@@ -47,5 +50,30 @@ public class DoofusController : MonoBehaviour
     private class PlayerData
     {
         public float speed;
+    }
+
+    private void CheckPulpit()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 0.4f);
+
+        foreach (Collider collider in colliders)
+        {
+            if (collider.CompareTag("Pulpit"))
+            {
+                GameObject pulpit = collider.gameObject;
+
+                if (pulpit != currentPulpit)
+                {
+                    currentPulpit = pulpit;
+
+                    if (ScoreManager.Instance != null)
+                    {
+                        ScoreManager.Instance.AddScore();
+                    }
+                }
+
+                return;
+            }
+        }
     }
 }
