@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance;
@@ -21,6 +22,12 @@ public class ScoreManager : MonoBehaviour
 
     public void AddScore()
     {
+        // Do not update the score after Game Over
+        if (GameManager.Instance != null && GameManager.Instance.IsGameOver)
+        {
+            return;
+        }
+
         Score++;
 
         if (scoreText != null)

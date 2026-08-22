@@ -50,6 +50,12 @@ public class PulpitSpawner : MonoBehaviour
         {
             yield return new WaitForSeconds(spawnTime);
 
+            // Stop spawning when the game is over
+            if (GameManager.Instance != null && GameManager.Instance.IsGameOver)
+            {
+                yield break;
+            }
+
             if (GameObject.FindGameObjectsWithTag("Pulpit").Length < 2)
             {
                 SpawnNextPulpit();

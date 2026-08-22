@@ -7,6 +7,7 @@ public class DoofusController : MonoBehaviour
 
     private float speed;
     private GameObject currentPulpit;
+    private bool fallDetected = false;
 
     private void Start()
     {
@@ -16,6 +17,10 @@ public class DoofusController : MonoBehaviour
 
     private void Update()
     {
+        // Stop movement after a fall has been detected
+        if (fallDetected)
+            return;
+
         Vector2 input = Vector2.zero;
 
         if (Keyboard.current != null)
@@ -37,7 +42,19 @@ public class DoofusController : MonoBehaviour
 
         transform.position += movement * speed * Time.deltaTime;
 
-        CheckPulpit();
+        bool onPulpit = CheckPulpit();
+
+        if (!onPulpit)
+        {
+            fallDetected = true;
+
+            Debug.Log("Doofus fell!");
+
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.GameOver();
+            }
+        }
     }
 
     [System.Serializable]
@@ -52,7 +69,7 @@ public class DoofusController : MonoBehaviour
         public float speed;
     }
 
-    private void CheckPulpit()
+    private bool CheckPulpit()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, 0.4f);
 
@@ -72,8 +89,10 @@ public class DoofusController : MonoBehaviour
                     }
                 }
 
-                return;
+                return true;
             }
         }
+
+        return false;
     }
 }

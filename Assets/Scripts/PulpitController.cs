@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PulpitController : MonoBehaviour
@@ -15,7 +16,20 @@ public class PulpitController : MonoBehaviour
             config.pulpit_data.max_pulpit_destroy_time
         );
 
-        Destroy(gameObject, destroyTime);
+        StartCoroutine(DestroyPulpit());
+    }
+
+    private IEnumerator DestroyPulpit()
+    {
+        yield return new WaitForSeconds(destroyTime);
+
+        // Do not destroy pulpits after Game Over
+        if (GameManager.Instance != null && GameManager.Instance.IsGameOver)
+        {
+            yield break;
+        }
+
+        Destroy(gameObject);
     }
 
     [System.Serializable]
