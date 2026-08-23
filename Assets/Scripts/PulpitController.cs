@@ -9,9 +9,24 @@ public class PulpitController : MonoBehaviour
     private float destroyTime;
     private float remainingTime;
 
+    private Renderer pulpitRenderer;
+
+    // Fixed color palette for pulpits
+    private static readonly Color[] pulpitColors =
+    {
+        new Color(0.25f, 0.55f, 0.95f), // Blue
+        new Color(0.30f, 0.75f, 0.40f), // Green
+        new Color(0.95f, 0.65f, 0.20f), // Orange
+        new Color(0.65f, 0.40f, 0.85f), // Purple
+        new Color(0.90f, 0.35f, 0.35f)  // Red
+    };
+
+    private static int nextColorIndex = 0;
+
     private void Start()
     {
-        GameConfig config = JsonUtility.FromJson<GameConfig>(configFile.text);
+        GameConfig config =
+            JsonUtility.FromJson<GameConfig>(configFile.text);
 
         destroyTime = Random.Range(
             config.pulpit_data.min_pulpit_destroy_time,
@@ -20,6 +35,20 @@ public class PulpitController : MonoBehaviour
 
         remainingTime = destroyTime;
 
+        // Get the pulpit's renderer
+        pulpitRenderer = GetComponent<Renderer>();
+
+        // Give this pulpit its own color
+        if (pulpitRenderer != null)
+        {
+            pulpitRenderer.material.color =
+                pulpitColors[nextColorIndex];
+
+            nextColorIndex =
+                (nextColorIndex + 1) % pulpitColors.Length;
+        }
+
+        // Hide timer until Doofus is standing on this pulpit
         if (timerText != null)
         {
             timerText.gameObject.SetActive(false);
@@ -30,8 +59,9 @@ public class PulpitController : MonoBehaviour
 
     private void Update()
     {
-        // Stop and hide the timer after Game Over
-        if (GameManager.Instance != null && GameManager.Instance.IsGameOver)
+        // Stop and hide timer after Game Over
+        if (GameManager.Instance != null &&
+            GameManager.Instance.IsGameOver)
         {
             if (timerText != null)
             {
@@ -61,7 +91,8 @@ public class PulpitController : MonoBehaviour
     {
         if (timerText != null)
         {
-            timerText.text = remainingTime.ToString("F1");
+            timerText.text =
+                remainingTime.ToString("F1");
         }
     }
 

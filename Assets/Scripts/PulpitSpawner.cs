@@ -27,7 +27,8 @@ public class PulpitSpawner : MonoBehaviour
     {
         LoadConfig();
 
-        GameObject existingPulpit = GameObject.FindGameObjectWithTag("Pulpit");
+        GameObject existingPulpit =
+            GameObject.FindGameObjectWithTag("Pulpit");
 
         if (existingPulpit != null)
         {
@@ -39,7 +40,8 @@ public class PulpitSpawner : MonoBehaviour
 
     private void LoadConfig()
     {
-        DiaryData diary = JsonUtility.FromJson<DiaryData>(configFile.text);
+        DiaryData diary =
+            JsonUtility.FromJson<DiaryData>(configFile.text);
 
         spawnTime = diary.pulpit_data.pulpit_spawn_time;
     }
@@ -51,12 +53,13 @@ public class PulpitSpawner : MonoBehaviour
             yield return new WaitForSeconds(spawnTime);
 
             // Stop spawning when the game is over
-            if (GameManager.Instance != null && GameManager.Instance.IsGameOver)
+            if (GameManager.Instance != null &&
+                GameManager.Instance.IsGameOver)
             {
                 yield break;
             }
 
-            // Keep a maximum of two pulpits alive
+            // Only allow two pulpits to exist at once
             if (GameObject.FindGameObjectsWithTag("Pulpit").Length < 2)
             {
                 SpawnNextPulpit();
@@ -85,11 +88,11 @@ public class PulpitSpawner : MonoBehaviour
             Vector3 direction =
                 directions[Random.Range(0, directions.Length)];
 
+            // Pulpits are 9x9, so place the next one adjacent
             spawnPosition =
                 lastPulpit.position + direction * 9f;
         }
 
-        // Spawn the new pulpit
         GameObject newPulpit = Instantiate(
             pulpitPrefab,
             spawnPosition,
@@ -98,7 +101,6 @@ public class PulpitSpawner : MonoBehaviour
 
         newPulpit.tag = "Pulpit";
 
-        // Remember the newest pulpit
         lastPulpit = newPulpit.transform;
     }
 }
