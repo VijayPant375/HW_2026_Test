@@ -10,7 +10,7 @@
 
 ### 🎬 Gameplay
 
-https://github.com/user-attachments/assets/05f3b94e-4e22-4131-b116-f0664b7be14f
+https://github.com/user-attachments/assets/a51cdcf2-d081-4854-93df-32010405f04b
 
 ### 📸 Screenshots
 
