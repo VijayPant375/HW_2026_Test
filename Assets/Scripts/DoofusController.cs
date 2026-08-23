@@ -42,18 +42,65 @@ public class DoofusController : MonoBehaviour
 
         transform.position += movement * speed * Time.deltaTime;
 
-        bool onPulpit = CheckPulpit();
+        CheckPulpit();
+    }
 
-        if (!onPulpit)
+    private void CheckPulpit()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 0.4f);
+
+        foreach (Collider collider in colliders)
         {
-            fallDetected = true;
-
-            Debug.Log("Doofus fell!");
-
-            if (GameManager.Instance != null)
+            if (collider.CompareTag("Pulpit"))
             {
-                GameManager.Instance.GameOver();
+                GameObject pulpit = collider.gameObject;
+
+                // Player has moved onto a new pulpit
+                if (pulpit != currentPulpit)
+                {
+                    // Hide timer on the previous pulpit
+                    if (currentPulpit != null)
+                    {
+                        PulpitController previousController =
+                            currentPulpit.GetComponent<PulpitController>();
+
+                        if (previousController != null)
+                        {
+                            previousController.SetTimerVisible(false);
+                        }
+                    }
+
+                    // Update current pulpit
+                    currentPulpit = pulpit;
+
+                    // Show timer on the pulpit Doofus is standing on
+                    PulpitController currentController =
+                        currentPulpit.GetComponent<PulpitController>();
+
+                    if (currentController != null)
+                    {
+                        currentController.SetTimerVisible(true);
+                    }
+
+                    // Increase score when landing on a new pulpit
+                    if (ScoreManager.Instance != null)
+                    {
+                        ScoreManager.Instance.AddScore();
+                    }
+                }
+
+                return;
             }
+        }
+
+        // Doofus is not standing on any pulpit
+        fallDetected = true;
+
+        Debug.Log("Doofus fell!");
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.GameOver();
         }
     }
 
@@ -67,32 +114,5 @@ public class DoofusController : MonoBehaviour
     private class PlayerData
     {
         public float speed;
-    }
-
-    private bool CheckPulpit()
-    {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, 0.4f);
-
-        foreach (Collider collider in colliders)
-        {
-            if (collider.CompareTag("Pulpit"))
-            {
-                GameObject pulpit = collider.gameObject;
-
-                if (pulpit != currentPulpit)
-                {
-                    currentPulpit = pulpit;
-
-                    if (ScoreManager.Instance != null)
-                    {
-                        ScoreManager.Instance.AddScore();
-                    }
-                }
-
-                return true;
-            }
-        }
-
-        return false;
     }
 }

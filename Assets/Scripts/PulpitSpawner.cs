@@ -56,6 +56,7 @@ public class PulpitSpawner : MonoBehaviour
                 yield break;
             }
 
+            // Keep a maximum of two pulpits alive
             if (GameObject.FindGameObjectsWithTag("Pulpit").Length < 2)
             {
                 SpawnNextPulpit();
@@ -81,11 +82,14 @@ public class PulpitSpawner : MonoBehaviour
                 Vector3.right
             };
 
-            Vector3 direction = directions[Random.Range(0, directions.Length)];
+            Vector3 direction =
+                directions[Random.Range(0, directions.Length)];
 
-            spawnPosition = lastPulpit.position + direction * 9f;
+            spawnPosition =
+                lastPulpit.position + direction * 9f;
         }
 
+        // Spawn the new pulpit
         GameObject newPulpit = Instantiate(
             pulpitPrefab,
             spawnPosition,
@@ -94,6 +98,7 @@ public class PulpitSpawner : MonoBehaviour
 
         newPulpit.tag = "Pulpit";
 
+        // Remember the newest pulpit
         lastPulpit = newPulpit.transform;
     }
 }
