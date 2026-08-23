@@ -6,6 +6,8 @@ public class ScoreManager : MonoBehaviour
     public static ScoreManager Instance;
 
     public int Score { get; private set; }
+    public int HighScore { get; private set; }
+
     public TextMeshProUGUI scoreText;
 
     private void Awake()
@@ -18,6 +20,9 @@ public class ScoreManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        // Load the saved high score
+        HighScore = PlayerPrefs.GetInt("HighScore", 0);
     }
 
     public void AddScore()
@@ -30,11 +35,21 @@ public class ScoreManager : MonoBehaviour
 
         Score++;
 
+        // Update high score
+        if (Score > HighScore)
+        {
+            HighScore = Score;
+
+            PlayerPrefs.SetInt("HighScore", HighScore);
+            PlayerPrefs.Save();
+        }
+
         if (scoreText != null)
         {
             scoreText.text = "Score: " + Score;
         }
 
         Debug.Log("Score: " + Score);
+        Debug.Log("High Score: " + HighScore);
     }
 }

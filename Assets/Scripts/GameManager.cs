@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TextMeshProUGUI finalScoreText;
+    [SerializeField] private TextMeshProUGUI highScoreText;
 
     private void Awake()
     {
@@ -44,6 +45,12 @@ public class GameManager : MonoBehaviour
         if (finalScoreText != null && ScoreManager.Instance != null)
         {
             finalScoreText.text = "Score: " + ScoreManager.Instance.Score;
+        }
+
+        // Display high score
+        if (highScoreText != null && ScoreManager.Instance != null)
+        {
+            highScoreText.text = "High Score: " + ScoreManager.Instance.HighScore;
         }
 
         // Show Game Over screen
