@@ -10,9 +10,7 @@
 
 ### 🎬 Gameplay
 
-<video src="./Media/gameplay.mp4" controls width="900"></video>
-
-[▶️ Watch / open the gameplay recording](./Media/gameplay.mp4)
+https://github.com/user-attachments/assets/05f3b94e-4e22-4131-b116-f0664b7be14f
 
 ### 📸 Screenshots
 
@@ -292,4 +290,4 @@ The game intentionally keeps the presentation simple and readable. The focus is 
 **Doofus Adventure**  
 Built for the **Hitwicket Game Developer Challenge 2026**.
 
-**Developer:** Vijay Raghav Pant
+**Developer:** [Vijay Raghav Pant](https://github.com/VijayPant375)
