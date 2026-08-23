@@ -77,18 +77,9 @@ public class PulpitSpawner : MonoBehaviour
         }
         else
         {
-            Vector3[] directions =
-            {
-                Vector3.forward,
-                Vector3.back,
-                Vector3.left,
-                Vector3.right
-            };
+            Vector3 direction = GetDoofusMovementDirection();
 
-            Vector3 direction =
-                directions[Random.Range(0, directions.Length)];
-
-            // Pulpits are 9x9, so place the next one adjacent
+            // Pulpits are 9x9, so place the next one adjacent.
             spawnPosition =
                 lastPulpit.position + direction * 9f;
         }
@@ -102,5 +93,41 @@ public class PulpitSpawner : MonoBehaviour
         newPulpit.tag = "Pulpit";
 
         lastPulpit = newPulpit.transform;
+    }
+
+    private Vector3 GetDoofusMovementDirection()
+    {
+        GameObject doofus = GameObject.FindGameObjectWithTag("Player");
+
+        if (doofus != null)
+        {
+            DoofusController controller =
+                doofus.GetComponent<DoofusController>();
+
+            if (controller != null)
+            {
+                Vector3 movementDirection =
+                    controller.CurrentMovementDirection;
+
+                // Convert the movement direction to one of
+                // the four valid pulpit directions.
+                if (Mathf.Abs(movementDirection.x) >
+                    Mathf.Abs(movementDirection.z))
+                {
+                    return movementDirection.x > 0
+                        ? Vector3.right
+                        : Vector3.left;
+                }
+                else
+                {
+                    return movementDirection.z > 0
+                        ? Vector3.forward
+                        : Vector3.back;
+                }
+            }
+        }
+
+        // Safe fallback if Doofus cannot be found.
+        return Vector3.forward;
     }
 }

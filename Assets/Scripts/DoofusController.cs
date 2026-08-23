@@ -9,6 +9,12 @@ public class DoofusController : MonoBehaviour
     private GameObject currentPulpit;
     private bool fallDetected = false;
 
+    // Stores the last direction Doofus moved in.
+    private Vector3 lastMovementDirection = Vector3.forward;
+
+    // Allows the spawner to know which direction Doofus is moving.
+    public Vector3 CurrentMovementDirection => lastMovementDirection;
+
     private void Start()
     {
         GameConfig config = JsonUtility.FromJson<GameConfig>(configFile.text);
@@ -39,6 +45,12 @@ public class DoofusController : MonoBehaviour
         }
 
         Vector3 movement = new Vector3(input.x, 0f, input.y).normalized;
+
+        // Remember the latest direction Doofus is moving.
+        if (movement != Vector3.zero)
+        {
+            lastMovementDirection = movement;
+        }
 
         transform.position += movement * speed * Time.deltaTime;
 
@@ -114,5 +126,11 @@ public class DoofusController : MonoBehaviour
     private class PlayerData
     {
         public float speed;
+    }
+
+    // Public method for the spawner to reset movement detection if needed.
+    public void ResetMovementDirection()
+    {
+        lastMovementDirection = Vector3.forward;
     }
 }
